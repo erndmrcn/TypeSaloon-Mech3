@@ -112,12 +112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba8d8175959bd4287b5a003cd27c2ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  word: {fileID: 0}
   gameController: {fileID: 0}
   startPos: {x: 0, y: 0, z: 0}
   dragging: {fileID: 0}
   prefab: {fileID: 4482715743296682993, guid: e0b021af4b96a48c58fcc812b26ba987, type: 3}
   letter: {fileID: 7725401608788037551}
-  myCanvas: {fileID: 0}
+  BGimage: {fileID: 7725401610621102311}
   rectTransform: {fileID: 7725401608650198963}
 --- !u!1 &7725401608788037549
 GameObject:

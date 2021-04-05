@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public List<Letter> letters;
     public List<Word> wordbase;
     public Letter currentLetter;
+    public int correctLetterCount;
 
     public void Awake()
     {
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
         screenManager.Initialize();
         levelController.Initialize();
         currentLetter = null;
+        correctLetterCount = 0;
     }
 
     public void ChangeState(gameStates state)
@@ -122,23 +124,36 @@ public class GameController : MonoBehaviour
                 Debug.Log("" + distance);
                 word.letterInserted = true;
                 word.insertedLetter = letter;
-                CheckLetter(word, i);
-            }
-            else {
-                continue;
+                letter.word = word;
+                CheckLetter(letter, word, i);
             }
         }
         letter.rectTransform.anchoredPosition = (letterPos);
         currentLetter = null;
     }
 
-    public void CheckLetter(Word tempWord, int i)
+    public void CheckLetter(Letter letter, Word tempWord, int i)
     {
         if (tempWord.insertedLetter.letter.text != ""+currentLevel.word[i])
         {
             // wrong letter make red
-            
+            // if count > 0, decrement correctCount by 1
+            letter.BGimage.color = Color.red;
+            if (correctLetterCount>0)
+            {
+                correctLetterCount--;
+            }
         }
+        else
+        {
+            // correct letter increment count by 1
+            // make letter bg green
+            letter.BGimage.color = Color.green;
+            correctLetterCount++;
+        }
+
+        // if correctCount == len next level
+        // if letter.word == null original bg
     }
 
     public void CheckWordBase()
@@ -148,6 +163,10 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        
+        if (correctLetterCount - 1 == currentLevel.word.Length)
+        {
+            // next level
+            Debug.Log("All letters inserted correctly");
+        }
     }
 }

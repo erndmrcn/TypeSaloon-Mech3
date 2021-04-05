@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 public class Letter : MonoBehaviour
 {
+    public Word word;
     public GameController gameController;
     public Vector3 startPos;
     public GameObject dragging;
     public GameObject prefab;
     public Text letter;
-    public Canvas myCanvas;
+    public Image BGimage;
     public RectTransform rectTransform;
 
     public void SetActive(Vector2 anchorPos)

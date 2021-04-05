@@ -708,14 +708,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - word: EYELINER
-    model: {fileID: 243967835}
+  - word: BRUSH
+    model: {fileID: 2122156662}
   - word: LIPSTICK
     model: {fileID: 6080988465428273065}
   - word: BLUSH
     model: {fileID: 1550475746}
-  - word: BRUSH
-    model: {fileID: 2122156662}
+  - word: EYELINER
+    model: {fileID: 243967835}
   currentLevel: 0
 --- !u!4 &668866175
 Transform:
@@ -880,6 +880,7 @@ MonoBehaviour:
   letters: []
   wordbase: []
   currentLetter: {fileID: 0}
+  correctLetterCount: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
