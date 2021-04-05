@@ -1,0 +1,44 @@
+﻿<Properties StartupConfiguration="{55E57983-54E6-707C-CE5E-98B6E947AB0A}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Source/Helper/NewClass.cs">
+    <Files>
+      <File FileName="Assets/Source/Controller/GameController.cs" Line="80" Column="28" />
+      <File FileName="Assets/Source/View/Screen.cs" Line="28" Column="19" />
+      <File FileName="Assets/Source/View/MainScreen.cs" />
+      <File FileName="Assets/Source/Controller/ScreenManager.cs" />
+      <File FileName="Assets/Source/Controller/InstantiateManager.cs" Line="23" Column="38" />
+      <File FileName="Assets/Source/View/EndScreen.cs" />
+      <File FileName="Assets/Source/View/GameScreen.cs" />
+      <File FileName="Assets/Source/Controller/LevelController.cs" />
+      <File FileName="Assets/Source/Model/Word.cs" />
+      <File FileName="Assets/Source/Model/Letter.cs" Line="20" Column="52" />
+      <File FileName="Assets/Source/Extensions/Extensions.cs" Line="9" Column="84" />
+      <File FileName="Assets/Source/Helper/NewClass.cs" Line="2" Column="8" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TypeSaloon-Mech3" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Source" expanded="True">
+                <Node name="Controller" expanded="True" />
+                <Node name="Extensions" expanded="True" />
+                <Node name="Helper" expanded="True">
+                  <Node name="NewClass.cs" selected="True" />
+                </Node>
+                <Node name="Model" expanded="True" />
+                <Node name="View" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7416a186-9b61-44bd-9df2-8c50efb95375" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
