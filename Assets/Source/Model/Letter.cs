@@ -14,11 +14,30 @@ public class Letter : MonoBehaviour
     public Text letter;
     public Image BGimage;
     public RectTransform rectTransform;
+    public bool isCorrect;
 
     public void SetActive(Vector2 anchorPos)
     {
         gameObject.SetActive(true);
         rectTransform.anchoredPosition = anchorPos;
+    }
+
+    public void SetCorrect()
+    {
+        isCorrect = true;
+        BGimage.color = Color.green;
+    }
+
+    public void SetWrong()
+    {
+        isCorrect = false;
+        BGimage.color = Color.red;
+    }
+
+    public void SetDefault()
+    {
+        isCorrect = false;
+        BGimage.color = Color.white;
     }
 
     public void PointerClick()

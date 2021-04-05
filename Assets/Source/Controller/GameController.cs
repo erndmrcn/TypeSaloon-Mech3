@@ -21,15 +21,14 @@ public class GameController : MonoBehaviour
     public List<Letter> letters;
     public List<Word> wordbase;
     public Letter currentLetter;
-    public int correctLetterCount;
-
+    public GameObject model;
+    public bool firstcall = true;
     public void Awake()
     {
         // make inializations   
         screenManager.Initialize();
         levelController.Initialize();
         currentLetter = null;
-        correctLetterCount = 0;
     }
 
     public void ChangeState(gameStates state)
@@ -80,9 +79,9 @@ public class GameController : MonoBehaviour
             item.SetActive(Helper.GetRandom(new Vector2(-480, -600), new Vector2(480, 0)));
         }
 
-        GameObject newModel = instantiateManager.CreateModel(currentLevel.model, letterParent.transform);
-        newModel.transform.localPosition = new Vector3(0.0f, 400.0f, 0.0f);
-        newModel.transform.localScale = new Vector3(250, 250, 1);
+        model = instantiateManager.CreateModel(currentLevel.model, letterParent.transform);
+        model.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
+        model.transform.localScale = new Vector3(250, 250, 1);
         
     }
 
@@ -93,10 +92,13 @@ public class GameController : MonoBehaviour
 
     public void OnGameState()
     {
+        if(!firstcall)
+            ClearScene();
         currentLevel = levelController.GetLevel();
         CreateGrids();
         CreateLetterModels();
         screenManager.ShowScreen(1);
+        firstcall = false;
     }
 
     public void OnEndState()
@@ -106,20 +108,35 @@ public class GameController : MonoBehaviour
         screenManager.ShowScreen(2);
     }
 
+    public void ClearScene()
+    {
+        Object.Destroy(model);
+        foreach (Letter item in letters)
+        {
+            item.gameObject.SetActive(false);
+            Object.Destroy((Letter) item);
+        }
+        foreach(Word item in wordbase)
+        {
+            item.gameObject.SetActive(false);
+            Object.Destroy((Word) item);
+        }
+    }
+    
     public void OnLetterSet(Letter letter)
     {
         Vector2 letterPos = letter.rectTransform.anchoredPosition;
         int len = currentLevel.word.Length;
-        float lastDistance = 1000f;
-        float distance = 1000f;
+        float distance;
+        letter.SetDefault();
         for (int i = 0; i < len; i++)
         {
             Word word = wordbase[i];
             Vector2 wordPos = word.rectTransform.anchoredPosition;
-            distance = Vector2.Distance(wordPos, letterPos);
-            if (distance < lastDistance)
+            distance = Vector2.Distance(wordPos, letter.rectTransform.anchoredPosition);
+            // distance = Vector2.Distance(wordPos, letterPos);
+            if (distance < 50f)
             {
-                lastDistance = distance;
                 letterPos = wordPos;
                 Debug.Log("" + distance);
                 word.letterInserted = true;
@@ -134,39 +151,48 @@ public class GameController : MonoBehaviour
 
     public void CheckLetter(Letter letter, Word tempWord, int i)
     {
+        
         if (tempWord.insertedLetter.letter.text != ""+currentLevel.word[i])
         {
             // wrong letter make red
             // if count > 0, decrement correctCount by 1
-            letter.BGimage.color = Color.red;
-            if (correctLetterCount>0)
-            {
-                correctLetterCount--;
-            }
+            letter.SetWrong();
         }
         else
         {
             // correct letter increment count by 1
             // make letter bg green
-            letter.BGimage.color = Color.green;
-            correctLetterCount++;
+            letter.SetCorrect();
         }
 
+        bool isGameEnd = true;
         // if correctCount == len next level
         // if letter.word == null original bg
-    }
+        for (int j = 0; j < letters.Count; j++)
+        {
+            if (letters[j].isCorrect == false)
+            {
+                isGameEnd = false;
+                break;
+            }
+        }
 
-    public void CheckWordBase()
-    {
-        
+        if (isGameEnd)
+        {
+            // nextLevel
+            levelController.NextLevel();
+            if (levelController.currentLevel == levelController.levels.Length)
+            {
+                // end game
+                ChangeState(gameStates.end);
+            }
+            else
+                ChangeState(gameStates.game);
+        }
     }
 
     private void Update()
     {
-        if (correctLetterCount - 1 == currentLevel.word.Length)
-        {
-            // next level
-            Debug.Log("All letters inserted correctly");
-        }
+        
     }
 }
