@@ -7,4 +7,10 @@ public class Word : MonoBehaviour
     public RectTransform rectTransform;
     public bool letterInserted;
     public Letter insertedLetter;
+
+    public void SetActive(Vector2 anchorPos)
+    {
+        gameObject.SetActive(true);
+        rectTransform.anchoredPosition = anchorPos;
+    }
 }

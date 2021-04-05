@@ -15,12 +15,11 @@ public class GameController : MonoBehaviour
     public GameObject letterGrid;
     public GameObject letterParent;
 
-    public float distance;
     public enum gameStates {ready, game, end};
     public gameStates CurrentState;
     public LevelModel currentLevel;
     public List<Letter> letters;
-    public List<GameObject> wordbase;
+    public List<Word> wordbase;
     public Letter currentLetter;
 
     public void Awake()
@@ -59,11 +58,10 @@ public class GameController : MonoBehaviour
 
         
         int spos = -50 - (((len - 1)/2) * 100);
-        wordbase = instantiateManager.CreateGrid(len, letterParent.transform);
-        foreach (GameObject item in wordbase)
+        wordbase = instantiateManager.CreateGrids(len, letterParent.transform);
+        foreach (Word item in wordbase)
         {
-            item.transform.localPosition = (new Vector3(spos, -910, 0));
-            item.SetActive(true);
+            item.SetActive(new Vector2(spos, -910));
             spos += step;
         }
     }
@@ -111,20 +109,20 @@ public class GameController : MonoBehaviour
         Vector2 letterPos = letter.rectTransform.anchoredPosition;
         int len = currentLevel.word.Length;
         float lastDistance = 1000f;
-
+        float distance = 1000f;
         for (int i = 0; i < len; i++)
         {
-            Vector2 wordPos = wordbase[i].GetComponent<Word>().rectTransform.anchoredPosition;
+            Word word = wordbase[i];
+            Vector2 wordPos = word.rectTransform.anchoredPosition;
             distance = Vector2.Distance(wordPos, letterPos);
             if (distance < lastDistance)
             {
-                Word tempWord = wordbase[i].GetComponent<Word>();
                 lastDistance = distance;
                 letterPos = wordPos;
                 Debug.Log("" + distance);
-                tempWord.letterInserted = true;
-                tempWord.insertedLetter = letter;
-                CheckLetter(tempWord, i);
+                word.letterInserted = true;
+                word.insertedLetter = letter;
+                CheckLetter(word, i);
             }
             else {
                 continue;

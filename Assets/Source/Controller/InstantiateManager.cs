@@ -4,21 +4,8 @@ using UnityEngine;
 
 public class InstantiateManager : MonoBehaviour
 {
-    public GameObject prefab;
-    public GameObject prefab1;
+    public Word WordSample;
     public Letter LetterSample;
-
-    public List<GameObject> CreateLetter(int number, Transform parent)
-    {
-        List<GameObject> returnList = new List<GameObject>();
-
-        for (int i = 0; i < number; i++)
-        {
-            returnList.Add(Instantiate(prefab, parent));
-        }
-
-        return returnList;
-    }
 
     public List<Letter> CreateLetters(int number, Transform parent)
     {
@@ -32,13 +19,13 @@ public class InstantiateManager : MonoBehaviour
         return returnList;
     }
 
-    public List<GameObject> CreateGrid(int number, Transform parent)
+    public List<Word> CreateGrids(int number, Transform parent)
     {
-        List<GameObject> returnList = new List<GameObject>();
+        List<Word> returnList = new List<Word>();
 
         for (int i = 0; i < number; i++)
         {
-            returnList.Add(Instantiate(prefab1, parent));
+            returnList.Add(Instantiate(WordSample, parent));
         }
 
         return returnList;
