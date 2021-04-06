@@ -6,15 +6,13 @@ using UnityEngine.UI;
 
 public class Letter : MonoBehaviour
 {
-    public Word word;
     public GameController gameController;
     public Vector3 startPos;
-    public GameObject dragging;
-    public GameObject prefab;
     public Text letter;
     public Image BGimage;
     public RectTransform rectTransform;
     public bool isCorrect;
+    public bool called;
 
     public void SetActive(Vector2 anchorPos)
     {
@@ -42,7 +40,6 @@ public class Letter : MonoBehaviour
 
     public void PointerClick()
     {
-        dragging = gameObject;
         startPos = transform.localPosition;
         // zDistance = Mathf.Abs(startPos.z - Camera.main.transform.position.z);
         // offset = startPos - Camera.main.ScreenToWorldPoint(
@@ -68,13 +65,6 @@ public class Letter : MonoBehaviour
 
     public void PointerUp()
     {
-        if (dragging)
-        {
-            dragging = null;
-        }
         gameController.OnLetterSet(this);
     }
-
-
-
 }

@@ -8,12 +8,15 @@ public class GameController : MonoBehaviour
     // other managers and controllers
     public ScreenManager screenManager;
     public InstantiateManager instantiateManager;
+    public PoolingController poolingController;
     public LevelController levelController;
 
     // GameObjects from unity
     public GameObject lettermodel;
     public GameObject letterGrid;
     public GameObject letterParent;
+    public Image BGImage;
+    public List<Sprite> images;
 
     public enum gameStates {ready, game, end};
     public gameStates CurrentState;
@@ -23,11 +26,15 @@ public class GameController : MonoBehaviour
     public Letter currentLetter;
     public GameObject model;
     public bool firstcall = true;
+
+    public Animator wrongAnimator;
+
     public void Awake()
     {
         // make inializations   
         screenManager.Initialize();
         levelController.Initialize();
+        poolingController.Initialize();
         currentLetter = null;
     }
 
@@ -56,13 +63,15 @@ public class GameController : MonoBehaviour
     {
         int len = currentLevel.word.Length;
         int step = 100;
-
         
         int spos = -50 - (((len - 1)/2) * 100);
-        wordbase = instantiateManager.CreateGrids(len, letterParent.transform);
-        foreach (Word item in wordbase)
+        wordbase.Capacity = len;
+        for (int i = 0; i < len; i++)
         {
-            item.SetActive(new Vector2(spos, -910));
+            Word word = PoolingController.PoolingManager.GetWordBase();
+            word.called = true;
+            word.SetActive(new Vector2(spos, -910));
+            wordbase.Add(word);
             spos += step;
         }
     }
@@ -72,14 +81,21 @@ public class GameController : MonoBehaviour
         int len = currentLevel.word.Length;
         string word = currentLevel.word;
         int i = 0;
-        letters = instantiateManager.CreateLetters(len, letterParent.transform);
-        foreach (Letter item in letters)
+
+        for (int j = 0; j < len; j++)
         {
-            item.letter.text = "" + word[i++];
-            item.SetActive(Helper.GetRandom(new Vector2(-480, -600), new Vector2(480, 0)));
+            Letter letter = PoolingController.PoolingManager.GetLetter();
+            letter.called = true;
+            letter.letter.text = word[i++].ToString();
+            letter.SetActive(Helper.GetRandom(new Vector2(-480, -600), new Vector2(480, 0)));
+            letters.Add(letter);
         }
 
         model = instantiateManager.CreateModel(currentLevel.model, letterParent.transform);
+        if (currentLevel.model.name == "Scissors")
+        {
+            model.transform.localRotation = Quaternion.Euler(90, 0, 0);
+        }
         model.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
         model.transform.localScale = new Vector3(250, 250, 1);
         
@@ -92,8 +108,13 @@ public class GameController : MonoBehaviour
 
     public void OnGameState()
     {
-        if(!firstcall)
+        if (!firstcall)
+        {
+            // play confetti for 1 or 2 secs
             ClearScene();
+            levelController.NextLevel();
+        }
+
         currentLevel = levelController.GetLevel();
         CreateGrids();
         CreateLetterModels();
@@ -105,22 +126,16 @@ public class GameController : MonoBehaviour
     {
         // if completed, cheers
         // else indicate that the word is wrong
+        // play confetti animation for 2 or 3 secs
         screenManager.ShowScreen(2);
     }
 
     public void ClearScene()
     {
         Object.Destroy(model);
-        foreach (Letter item in letters)
-        {
-            item.gameObject.SetActive(false);
-            Object.Destroy((Letter) item);
-        }
-        foreach(Word item in wordbase)
-        {
-            item.gameObject.SetActive(false);
-            Object.Destroy((Word) item);
-        }
+        poolingController.CleanScene();
+        letters.Clear();
+        wordbase.Clear();
     }
     
     public void OnLetterSet(Letter letter)
@@ -138,10 +153,8 @@ public class GameController : MonoBehaviour
             if (distance < 50f)
             {
                 letterPos = wordPos;
-                Debug.Log("" + distance);
                 word.letterInserted = true;
                 word.insertedLetter = letter;
-                letter.word = word;
                 CheckLetter(letter, word, i);
             }
         }
@@ -152,10 +165,11 @@ public class GameController : MonoBehaviour
     public void CheckLetter(Letter letter, Word tempWord, int i)
     {
         
-        if (tempWord.insertedLetter.letter.text != ""+currentLevel.word[i])
+        if (tempWord.insertedLetter.letter.text != currentLevel.word[i].ToString())
         {
             // wrong letter make red
             // if count > 0, decrement correctCount by 1
+            wrongAnimator.gameObject.SetActive(true);
             letter.SetWrong();
         }
         else
@@ -180,19 +194,31 @@ public class GameController : MonoBehaviour
         if (isGameEnd)
         {
             // nextLevel
-            levelController.NextLevel();
-            if (levelController.currentLevel == levelController.levels.Length)
-            {
-                // end game
-                ChangeState(gameStates.end);
-            }
-            else
-                ChangeState(gameStates.game);
+            ChangeState(gameStates.end);
+        }
+    }
+
+    public void BGChange()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            // BG #1
+            BGImage.sprite = images[0];
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            // BG #2
+            BGImage.sprite = images[1];
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            // BG #3
+            BGImage.sprite = images[2];
         }
     }
 
     private void Update()
     {
-        
+        BGChange();
     }
 }

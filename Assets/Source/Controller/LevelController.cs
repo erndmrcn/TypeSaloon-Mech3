@@ -15,7 +15,7 @@ public class LevelController : MonoBehaviour
 
     public void NextLevel()
     {
-        currentLevel++;
+        currentLevel = currentLevel + 1 < levels.Length ? currentLevel + 1 : 0;
     }
 
     public LevelModel GetLevel()
