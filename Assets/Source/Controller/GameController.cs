@@ -7,13 +7,10 @@ public class GameController : MonoBehaviour
 {
     // other managers and controllers
     public ScreenManager screenManager;
-    public InstantiateManager instantiateManager;
     public PoolingController poolingController;
     public LevelController levelController;
 
     // GameObjects from unity
-    public GameObject lettermodel;
-    public GameObject letterGrid;
     public GameObject letterParent;
     public Image BGImage;
     public List<Sprite> images;
@@ -26,7 +23,6 @@ public class GameController : MonoBehaviour
     public Letter currentLetter;
     public GameObject model;
     public bool firstcall = true;
-
     public Animator wrongAnimator;
 
     public void Awake()
@@ -70,7 +66,7 @@ public class GameController : MonoBehaviour
         {
             Word word = PoolingController.PoolingManager.GetWordBase();
             word.called = true;
-            word.SetActive(new Vector2(spos, -910));
+            word.SetActive(new Vector2(spos, -800));
             wordbase.Add(word);
             spos += step;
         }
@@ -87,16 +83,16 @@ public class GameController : MonoBehaviour
             Letter letter = PoolingController.PoolingManager.GetLetter();
             letter.called = true;
             letter.letter.text = word[i++].ToString();
-            letter.SetActive(Helper.GetRandom(new Vector2(-480, -600), new Vector2(480, 0)));
+            letter.SetActive(Helper.GetRandom(new Vector2(-420, -600), new Vector2(420, 100)));
             letters.Add(letter);
         }
 
-        model = instantiateManager.CreateModel(currentLevel.model, letterParent.transform);
-        if (currentLevel.model.name == "Scissors")
+        model = PoolingController.PoolingManager.CreateModel(currentLevel.model, letterParent.transform);
+        model.transform.localPosition = new Vector3(0.0f, 400.0f, 0.0f);
+        if (model.name == "LipStickBottom(Clone)")
         {
-            model.transform.localRotation = Quaternion.Euler(90, 0, 0);
+            model.transform.localPosition = new Vector3(0f, 600f, 0f);
         }
-        model.transform.localPosition = new Vector3(0.0f, 200.0f, 0.0f);
         model.transform.localScale = new Vector3(250, 250, 1);
         
     }
@@ -189,6 +185,11 @@ public class GameController : MonoBehaviour
                 isGameEnd = false;
                 break;
             }
+            if (wordbase[j].letterInserted == false)
+            {
+                isGameEnd = false;
+                break;
+            }
         }
 
         if (isGameEnd)
@@ -220,5 +221,9 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         BGChange();
+        if (model)
+        {
+            model.transform.Rotate(new Vector3(0, 90*Time.deltaTime, 0), Space.World);
+        }
     }
 }

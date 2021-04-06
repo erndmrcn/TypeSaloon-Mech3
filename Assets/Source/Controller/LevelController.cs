@@ -9,7 +9,6 @@ public class LevelController : MonoBehaviour
 
     public void Initialize()
     {
-
         currentLevel = 0;
     }
 

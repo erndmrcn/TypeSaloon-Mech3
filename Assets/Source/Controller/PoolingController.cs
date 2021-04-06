@@ -7,6 +7,7 @@ public class PoolingController : MonoBehaviour
     public List<Letter> letters;
     public List<Word> wordbase;
     public static PoolingController PoolingManager;
+    public Sprite panel;
 
     public void Initialize()
     {
@@ -19,7 +20,7 @@ public class PoolingController : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
+        
         foreach (Letter item in letters)
         {
             item.gameObject.SetActive(false);
@@ -38,6 +39,16 @@ public class PoolingController : MonoBehaviour
     public Word GetWordBase()
     {
         return wordbase.Find(x => x.called == false);
+    }
+
+    public GameObject CreateModel(GameObject prefab, Transform parent)
+    {
+        return Instantiate(prefab, parent);
+    }
+
+    public void GetPanel()
+    {
+
     }
 
     public void CleanScene()

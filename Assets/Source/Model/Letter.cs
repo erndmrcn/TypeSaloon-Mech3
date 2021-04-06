@@ -41,26 +41,14 @@ public class Letter : MonoBehaviour
     public void PointerClick()
     {
         startPos = transform.localPosition;
-        // zDistance = Mathf.Abs(startPos.z - Camera.main.transform.position.z);
-        // offset = startPos - Camera.main.ScreenToWorldPoint(
-           // new Vector3(Input.mousePosition.x, Input.mousePosition.y, zDistance));
     }
 
     public void PointerDown()
     {
-        //Vector2 pos;
-        //RectTransformUtility.ScreenPointToLocalPointInRectangle(myCanvas.transform as RectTransform, Input.mousePosition, myCanvas.worldCamera, out pos);
-        //Vector3 temp = pos;
-        //temp.z = 0;
-        //transform.localPosition = temp;
-        
         gameController.currentLetter = this;
         Vector3 myScreenPos = Camera.main.WorldToScreenPoint(transform.position);
         transform.position =
            Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, myScreenPos.z));
-        //Vector3 pos = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0);
-    
-        //transform.position = (pos);
     }
 
     public void PointerUp()
